@@ -8,6 +8,8 @@ import discord
 
 import aiocron
 
+import sub_bot
+
 # 1
 from discord.ext import commands
 
@@ -56,6 +58,13 @@ async def stock_data(ctx, stock_company):
     else:
         await ctx.send("Stock data for {stockCompany} doesn't exist!".format(stockCompany=stock_company))
 
+@bot.command(name="get_daily_trade_updates_plot", help="Shows detailed plot of a specified company.")
+async def get_daily_trade_updates_plot(ctx, stock_company):
+
+    if stock_company in top_stock_companies:
+        await sub_bot.send_daily_trade_updates_plot(stock_company, ctx)
+    else:
+        await ctx.send("Stock data plot for {stockCompany} doesn't exist!".format(stockCompany=stock_company))
 
 @bot.command(name="create-channel", help="An admin creates a new channel.")
 @commands.has_role('admin')
@@ -112,7 +121,7 @@ async def send_stock_details():
             bot.guilds[0].channels, name='stock-details')
 
     await existing_channel.send(msg)
-
+    await sub_bot.send_daily_trade_updates_plot(top_stock_company, existing_channel)
 
 # *************************************************************
 
