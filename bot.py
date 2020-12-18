@@ -58,6 +58,7 @@ async def stock_data(ctx, stock_company):
     else:
         await ctx.send("Stock data for {stockCompany} doesn't exist!".format(stockCompany=stock_company))
 
+
 @bot.command(name="get_daily_trade_updates_plot", help="Shows detailed plot of a specified company.")
 async def get_daily_trade_updates_plot(ctx, stock_company):
 
@@ -65,6 +66,18 @@ async def get_daily_trade_updates_plot(ctx, stock_company):
         await sub_bot.send_daily_trade_updates_plot(stock_company, ctx)
     else:
         await ctx.send("Stock data plot for {stockCompany} doesn't exist!".format(stockCompany=stock_company))
+
+
+@bot.command(name="get_stock_history", help="Shows history plot of a specified company.")
+async def get_stock_history(ctx, *args):
+    if len(args) >= 1:
+        if set(args).issubset(tuple(top_stock_companies)):
+            await sub_bot.send_history_plot(args, ctx)
+        else:
+            await ctx.send("Invalid set of companies!")
+    else:
+        await ctx.send("Please enter atleast one company as argument.")
+
 
 @bot.command(name="create-channel", help="An admin creates a new channel.")
 @commands.has_role('admin')
