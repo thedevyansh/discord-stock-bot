@@ -1,0 +1,6 @@
+discord.py
+yfinance
+aiocron
+python-dotenv
+plotly
+matplotlib
