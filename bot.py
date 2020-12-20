@@ -16,8 +16,11 @@ from discord.ext import commands
 top_stock_companies = ['AAPL', 'GOOGL', 'TSLA', 'MSFT', 'AMZN', 'FB', 'BRK-B', 'SPY',
                        'BABA', 'JPM', 'WMT', 'V', 'T', 'UNH', 'PFE', 'INTC', 'VZ', 'ORCL']
 
+df = None
 df_not_none = False
 count = 0
+random_company = ''
+nrows = 0
 
 if not os.path.exists("images"):
     os.mkdir("images")
@@ -77,6 +80,14 @@ async def get_stock_history(ctx, *args):
             await ctx.send("Invalid set of companies!")
     else:
         await ctx.send("Please enter atleast one company as argument.")
+
+
+@bot.command(name="get_stock_history_in_date_interval", help="Shows history plot of a specified company for start & end date.")
+async def get_stock_history_in_date_interval(ctx, *args):
+    if len(args) >= 3:
+        await sub_bot.send_history_plot_in_date_interval(args, ctx)
+    else:
+        await ctx.send("Please enter correct usage")
 
 
 @bot.command(name="create-channel", help="An admin creates a new channel.")
@@ -141,8 +152,7 @@ async def send_stock_details():
 
 @aiocron.crontab('30 10-16 * * mon-fri')
 async def show_hourly_plot():
-    global df_not_none, count
-    random_company = ''
+    global df_not_none, count, df, random_company, nrows
 
     now = datetime.datetime.now()
     if now.hour == 10:
@@ -150,6 +160,7 @@ async def show_hourly_plot():
         random_company = random.choice(top_stock_companies)
         df = yf.download(random_company,
                          period="1d", interval="1m")
+        nrows = len(df.index)
 
     elif not df_not_none:
         df_not_none = True
@@ -171,10 +182,15 @@ async def show_hourly_plot():
         random_company = random.choice(top_stock_companies)
         df = yf.download(random_company,
                          period="1d", interval="1m")
+        nrows = len(df.index)
 
     limiter = 6.5 if (count == 6) else (count + 1)
+    slice_limiter = 60*limiter
+    
+    if count == 6 and nrows != 390:
+        slice_limiter = nrows
 
-    fig = px.line(df[60*count: 60*limiter], y='Close',
+    fig = px.line(df[60*count: slice_limiter], y='Close',
                   title='Stock prices of {company} for {hour1}:30 - {hour2}:30'.format(company=random_company, hour1=now.hour-1, hour2=now.hour))
 
     fig.write_image('images/stock_{i}.png'.format(i=count))
