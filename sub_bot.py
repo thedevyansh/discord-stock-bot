@@ -21,8 +21,15 @@ async def send_daily_trade_updates_plot(top_stock_company, existing_channel):
                   title='Latest stock prices of {company}'.format(company=top_stock_company))
     fig.write_image('images/daily_trade_updates_plot_2.png')
 
-    await existing_channel.send(file=discord.File('images/daily_trade_updates_plot_1.png'))
-    await existing_channel.send(file=discord.File('images/daily_trade_updates_plot_2.png'))
+    my_files = [
+        discord.File('images/daily_trade_updates_plot_1.png'),
+        discord.File('images/daily_trade_updates_plot_2.png')
+    ]
+
+    await existing_channel.send('Latest stock prices:', files=my_files)
+
+    # await existing_channel.send(file=discord.File('images/daily_trade_updates_plot_1.png'))
+    # await existing_channel.send(file=discord.File('images/daily_trade_updates_plot_2.png'))
 
 
 async def send_history_plot(stock_companies, existing_channel):

@@ -56,8 +56,8 @@ async def stock_data(ctx, stock_company):
 
         fig.write_image('images/stock_previous_day.png')
 
-        await ctx.send(msg)
-        await ctx.send(file=discord.File('images/stock_previous_day.png'))
+        await ctx.send(msg, file=discord.File('images/stock_previous_day.png'))
+        # await ctx.send(file=discord.File('images/stock_previous_day.png'))
     else:
         await ctx.send("Stock data for {stockCompany} doesn't exist!".format(stockCompany=stock_company))
 
