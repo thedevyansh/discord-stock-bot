@@ -49,15 +49,19 @@ async def stock_data(ctx, stock_company):
         # stock_company_df = yf.download(stock_company, period="2d")
         # msg = create_msg(stock_company, stock_company_df)
 
-        stock_company_df = yf.download(
-            stock_company, period="2d", interval="1m")
-        fig = px.line(stock_company_df[0: 390], y='Close',
+        # stock_company_df = yf.download(
+        #     stock_company, period="2d", interval="1m")
+        stock_company_df = yf.download(stock_company)
+        # fig = px.line(stock_company_df[0: 390], y='Close',
+        #               title='Stock prices of {company} for previous day'.format(company=stock_company))
+
+        fig = px.line(stock_company_df, y='Close',
                       title='Stock prices of {company} for previous day'.format(company=stock_company))
 
         fig.write_image('images/stock_previous_day.png')
 
         # await ctx.send(msg)
-        #await ctx.send(msg, file=discord.File('images/stock_previous_day.png'))
+        # await ctx.send(msg, file=discord.File('images/stock_previous_day.png'))
         await ctx.send(file=discord.File('images/stock_previous_day.png'))
     else:
         await ctx.send("Stock data for {stockCompany} doesn't exist!".format(stockCompany=stock_company))
@@ -187,7 +191,7 @@ async def show_hourly_plot():
 
     limiter = 6.5 if (count == 6) else (count + 1)
     slice_limiter = 60*limiter
-    
+
     if count == 6 and nrows != 390:
         slice_limiter = nrows
 
