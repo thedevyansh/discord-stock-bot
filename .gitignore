@@ -1,3 +1,4 @@
 .env
 stock-venv/
 __pycache__
+images/
