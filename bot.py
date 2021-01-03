@@ -5,6 +5,7 @@ import yfinance as yf
 import plotly.express as px
 from dotenv import load_dotenv
 import discord
+import matplotlib.pyplot as plt
 
 import aiocron
 
@@ -46,23 +47,23 @@ async def get_list(ctx):
 async def stock_data(ctx, stock_company):
 
     if stock_company in top_stock_companies:
-        # stock_company_df = yf.download(stock_company, period="2d")
-        # msg = create_msg(stock_company, stock_company_df)
+        stock_company_df = yf.download(stock_company, period="2d")
+        msg = create_msg(stock_company, stock_company_df)
 
-        # stock_company_df = yf.download(
-        #     stock_company, period="2d", interval="1m")
-        stock_company_df = yf.download(stock_company)
+        stock_company_df = yf.download(
+           stock_company, period="2d", interval="1m")
         # fig = px.line(stock_company_df[0: 390], y='Close',
-        #               title='Stock prices of {company} for previous day'.format(company=stock_company))
+        #                title='Stock prices of {company} for previous day'.format(company=stock_company))
+        stock_company_df[0:390].plot(y='Close')
 
-        fig = px.line(stock_company_df, y='Close',
-                      title='Stock prices of {company} for previous day'.format(company=stock_company))
+        plt.xlabel('Datetime')
+        plt.ylabel('Close')
+        plt.title('Stock prices of {company} for previous day'.format(company=stock_company))
 
-        fig.write_image('images/stock_previous_day.png')
+        # fig.write_image('images/stock_previous_day.png')
+        plt.savefig('images/stock_previous_day.png')
 
-        # await ctx.send(msg)
-        # await ctx.send(msg, file=discord.File('images/stock_previous_day.png'))
-        await ctx.send(file=discord.File('images/stock_previous_day.png'))
+        await ctx.send(msg, file=discord.File('images/stock_previous_day.png'))
     else:
         await ctx.send("Stock data for {stockCompany} doesn't exist!".format(stockCompany=stock_company))
 
