@@ -13,14 +13,14 @@ async def send_daily_trade_updates_plot(top_stock_company, existing_channel):
     top_stock_company_df = yf.download(
         top_stock_company, period="1d", interval="1m")
 
-    top_stock_company_df.plot(y='Close')
+    top_stock_company_df.plot(y='Close', linewidth=0.85)
 
     plt.xlabel('Datetime')
     plt.ylabel('Close')
     plt.title('Latest stock prices of {company}'.format(company=top_stock_company))
     plt.savefig('images/daily_trade_updates_plot_1.png')
 
-    top_stock_company_df.plot(y=['Open', 'High', 'Low', 'Close', 'Adj Close'])
+    top_stock_company_df.plot(y=['Open', 'High', 'Low', 'Close', 'Adj Close'], linewidth=0.85)
 
     plt.xlabel('Datetime')
     plt.ylabel('Value')
@@ -38,12 +38,12 @@ async def send_daily_trade_updates_plot(top_stock_company, existing_channel):
 
 async def send_history_plot(stock_companies, existing_channel):
     df = yf.download(stock_companies[0])
-    ax = df.plot(y='Close', label=stock_companies[0])
+    ax = df.plot(y='Close', label=stock_companies[0], linewidth=0.85)
 
     for stock_company in stock_companies:
         if stock_company != stock_companies[0]:
             df = yf.download(stock_company)
-            df.plot(ax=ax, y='Close', label=stock_company)
+            df.plot(ax=ax, y='Close', label=stock_company, linewidth=0.85)
 
     plt.xlabel('Date')
     plt.ylabel('Close')
@@ -69,13 +69,13 @@ async def send_history_plot_in_date_interval(args, existing_channel):
         arr.append(args[i])
     if set(tuple(arr)).issubset(tuple(top_stock_companies)):
         df = yf.download(arr[0], start=args[length-2], end=args[length-1])
-        ax = df.plot(y='Close', label=arr[0])
+        ax = df.plot(y='Close', label=arr[0], linewidth=0.85)
 
         for stock_company in arr:
             if stock_company != arr[0]:
                 df = yf.download(
                     stock_company, start=args[length-2], end=args[length-1])
-                df.plot(ax=ax, y='Close', label=stock_company)
+                df.plot(ax=ax, y='Close', label=stock_company, linewidth=0.85)
 
         plt.xlabel('Date')
         plt.ylabel('Close')
