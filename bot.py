@@ -52,7 +52,7 @@ async def stock_data(ctx, stock_company):
 
         stock_company_df = yf.download(
            stock_company, period="2d", interval="1m")
-        stock_company_df[0:390].plot(y='Close')
+        stock_company_df[0:390].plot(y='Close', linewidth=0.85)
 
         plt.xlabel('Datetime')
         plt.ylabel('Close')
@@ -193,10 +193,13 @@ async def show_hourly_plot():
     if count == 6 and nrows != 390:
         slice_limiter = nrows
 
-    fig = px.line(df[60*count: slice_limiter], y='Close',
-                  title='Stock prices of {company} for {hour1}:30 - {hour2}:30'.format(company=random_company, hour1=now.hour-1, hour2=now.hour))
+    df[60*count: slice_limiter].plot(y='Close', linewidth=0.85)
 
-    fig.write_image('images/stock_{i}.png'.format(i=count))
+    plt.xlabel('Datetime')
+    plt.ylabel('Close')
+    plt.title('Stock prices of {company} for {hour1}:30 - {hour2}:30'.format(company=random_company, hour1=now.hour-1, hour2=now.hour))
+
+    plt.savefig('images/stock_{i}.png'.format(i=count))
 
     existing_channel = discord.utils.get(
         bot.guilds[0].channels, name='stock-details')
@@ -215,6 +218,5 @@ async def show_hourly_plot():
     if now.hour == 16:
         df_not_none = False
         count = 0
-
 
 bot.run(TOKEN)
