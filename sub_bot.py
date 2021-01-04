@@ -1,3 +1,4 @@
+import os
 import yfinance as yf
 import discord
 import plotly.express as px
@@ -35,6 +36,9 @@ async def send_daily_trade_updates_plot(top_stock_company, existing_channel):
 
     await existing_channel.send('Latest stock prices:', files=my_files)
 
+    os.remove('images/daily_trade_updates_plot_1.png')
+    os.remove('images/daily_trade_updates_plot_2.png')
+
 
 async def send_history_plot(stock_companies, existing_channel):
     df = yf.download(stock_companies[0])
@@ -52,6 +56,8 @@ async def send_history_plot(stock_companies, existing_channel):
     plt.savefig('images/history.png')
 
     await existing_channel.send(file=discord.File('images/history.png'))
+
+    os.remove('images/history.png')
 
 
 async def send_history_plot_in_date_interval(args, existing_channel):
@@ -85,5 +91,7 @@ async def send_history_plot_in_date_interval(args, existing_channel):
         plt.savefig('images/history_date_interval.png')
 
         await existing_channel.send(file=discord.File('images/history_date_interval.png'))
+
+        os.remove('images/history_date_interval.png')
     else:
         await existing_channel.send("Invalid set of companies.")
