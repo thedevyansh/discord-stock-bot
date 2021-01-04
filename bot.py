@@ -38,12 +38,12 @@ async def on_ready():
     print(f'{bot.user.name} has connected to Discord!')
 
 
-@bot.command(name="get_list", help="Gets list of companies for which stock details can be fetched.")
+@bot.command(name="get-list", help="Check list of companies for which stock details can be fetched.")
 async def get_list(ctx):
     await ctx.send(top_stock_companies)
 
 
-@bot.command(name="get_stock_data", help="Gets stock data of a specific company for the previous day.")
+@bot.command(name="prev-stock-data", help="Check previous day stock data of a company.")
 async def stock_data(ctx, stock_company):
 
     if stock_company in top_stock_companies:
@@ -61,11 +61,13 @@ async def stock_data(ctx, stock_company):
         plt.savefig('images/stock_previous_day.png')
 
         await ctx.send(msg, file=discord.File('images/stock_previous_day.png'))
+
+        os.remove('images/stock_previous_day.png')
     else:
         await ctx.send("Stock data for {stockCompany} doesn't exist!".format(stockCompany=stock_company))
 
 
-@bot.command(name="get_daily_trade_updates_plot", help="Shows detailed plot of a specified company.")
+@bot.command(name="daily-trade-updates", help="Check latest detailed plot of a company.")
 async def get_daily_trade_updates_plot(ctx, stock_company):
 
     if stock_company in top_stock_companies:
@@ -74,7 +76,7 @@ async def get_daily_trade_updates_plot(ctx, stock_company):
         await ctx.send("Stock data plot for {stockCompany} doesn't exist!".format(stockCompany=stock_company))
 
 
-@bot.command(name="get_stock_history", help="Shows history plot of a specified company.")
+@bot.command(name="stock-history", help="Check historical plot of a company(s).")
 async def get_stock_history(ctx, *args):
     if len(args) >= 1:
         if set(args).issubset(tuple(top_stock_companies)):
@@ -85,7 +87,7 @@ async def get_stock_history(ctx, *args):
         await ctx.send("Please enter atleast one company as argument.")
 
 
-@bot.command(name="get_stock_history_in_date_interval", help="Shows history plot of a specified company for start & end date.")
+@bot.command(name="stock-history-bw-dates", help="Check historical plot of company(s) for start & end date.")
 async def get_stock_history_in_date_interval(ctx, *args):
     if len(args) >= 3:
         await sub_bot.send_history_plot_in_date_interval(args, ctx)
@@ -212,6 +214,8 @@ async def show_hourly_plot():
             bot.guilds[0].channels, name='stock-details')
 
     await existing_channel.send(file=discord.File('images/stock_{i}.png'.format(i=count)))
+
+    os.remove('images/stock_{i}.png'.format(i=count))
 
     count = count + 1
 
