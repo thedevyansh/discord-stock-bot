@@ -33,7 +33,4 @@
 
     NOTE: The stock data is fetched from Yahoo Finance API. The stock details of all companies for the present day are made available gradually. Thus, latest stock info could mean either stock info for the present day or the day before, taking into account the fact that stock market generally stays open from Monday through Friday. Similarly for the previous day stock info.
 
-    ### References
-    https://www.crio.do/projects/python-discord-bot/
-
     
