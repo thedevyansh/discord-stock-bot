@@ -18,16 +18,18 @@ async def send_daily_trade_updates_plot(top_stock_company, existing_channel):
 
     plt.xlabel('Datetime')
     plt.ylabel('Close')
-    plt.title('Latest stock prices of {company}'.format(company=top_stock_company))
+    plt.title('Latest stock prices of {company}'.format(
+        company=top_stock_company))
     plt.savefig('images/daily_trade_updates_plot_1.png')
 
-    top_stock_company_df.plot(y=['Open', 'High', 'Low', 'Close', 'Adj Close'], linewidth=0.85)
+    top_stock_company_df.plot(
+        y=['Open', 'High', 'Low', 'Close', 'Adj Close'], linewidth=0.85)
 
     plt.xlabel('Datetime')
     plt.ylabel('Value')
-    plt.title('Latest stock prices of {company}'.format(company=top_stock_company))
+    plt.title('Latest stock prices of {company}'.format(
+        company=top_stock_company))
     plt.savefig('images/daily_trade_updates_plot_2.png')
-
 
     my_files = [
         discord.File('images/daily_trade_updates_plot_1.png'),

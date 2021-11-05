@@ -51,12 +51,13 @@ async def stock_data(ctx, stock_company):
         msg = create_msg(stock_company, stock_company_df)
 
         stock_company_df = yf.download(
-           stock_company, period="2d", interval="1m")
+            stock_company, period="2d", interval="1m")
         stock_company_df[0:390].plot(y='Close', linewidth=0.85)
 
         plt.xlabel('Datetime')
         plt.ylabel('Close')
-        plt.title('Stock prices of {company} for previous day'.format(company=stock_company))
+        plt.title('Stock prices of {company} for previous day'.format(
+            company=stock_company))
 
         plt.savefig('images/stock_previous_day.png')
 
@@ -152,8 +153,6 @@ async def send_stock_details():
     await existing_channel.send(msg)
     await sub_bot.send_daily_trade_updates_plot(top_stock_company, existing_channel)
 
-# *************************************************************
-
 
 @aiocron.crontab('30 10-16 * * mon-fri')
 async def show_hourly_plot():
@@ -199,7 +198,8 @@ async def show_hourly_plot():
 
     plt.xlabel('Datetime')
     plt.ylabel('Close')
-    plt.title('Stock prices of {company} for {hour1}:30 - {hour2}:30'.format(company=random_company, hour1=now.hour-1, hour2=now.hour))
+    plt.title('Stock prices of {company} for {hour1}:30 - {hour2}:30'.format(
+        company=random_company, hour1=now.hour-1, hour2=now.hour))
 
     plt.savefig('images/stock_{i}.png'.format(i=count))
 
